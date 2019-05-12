@@ -24,10 +24,6 @@ public class FilmMakerTools {
         String name = filmMakerStr.getString("name");
         String alt = filmMakerStr.getString("alt");
         String image = filmMakerStr.getJSONObject("avatars").getString("small");
-        System.out.println(id);
-        System.out.println(name);
-        System.out.println(alt);
-        System.out.println(image);
 
         FilmMaker filmMaker = new FilmMaker();
         filmMaker.setId(id);

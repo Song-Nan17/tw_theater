@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.tw_theater.dao.Response;
 import com.example.tw_theater.model.FilmMaker;
+import com.example.tw_theater.model.Genre;
 import com.example.tw_theater.model.Movie;
 
 import java.lang.reflect.Type;
@@ -12,11 +13,12 @@ import java.util.List;
 
 public class MovieTools {
     private FilmMakerTools filmMakerTools = new FilmMakerTools();
+    private GenreTools genreTools = new GenreTools();
 
     public List<Movie> getMovies() {
         List<Movie> movies = new ArrayList<>();
         int start = 0;
-        int count = 1;
+        int count = 20;
 //        for (int i = 0; i < 5; i++, start += count) {
         String movie_url = "https://api.douban.com/v2/movie/top250?start=" + start + "&count=" + count;
         movies.addAll(generateMovies(movie_url));
@@ -47,12 +49,12 @@ public class MovieTools {
         double rate = subject.getJSONObject("rating").getDouble("average");
         int year = subject.getInteger("year");
         JSONArray directorsStr = subject.getJSONArray("directors");
-        System.out.println(directorsStr.size());
-        System.out.println(directorsStr);
         JSONArray castsStr = subject.getJSONArray("casts");
+        JSONArray genresStr = subject.getJSONArray("genres");
 
         List<FilmMaker> directors =  filmMakerTools.generateFilmMakers(directorsStr);
         List<FilmMaker> casts = filmMakerTools.generateFilmMakers(castsStr);
+        List<Genre> genres = genreTools.getGenres(genresStr);
 
         Movie movie = new Movie();
         movie.setId(id);
@@ -64,6 +66,7 @@ public class MovieTools {
         movie.setYear(year);
         movie.setDirectors(directors);
         movie.setCasts(casts);
+        movie.setGenres(genres);
         return movie;
     }
 }
