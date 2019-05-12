@@ -1,4 +1,4 @@
-package com.example.tw_theater.dao.initialization;
+package com.example.tw_theater.dao;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -1,15 +1,20 @@
 package com.example.tw_theater.model;
 
+import javax.persistence.*;
 import java.time.Year;
 
+@Entity
+@Table(name = "movie")
 public class Movie {
+    @Id
     private String id;
     private String title;
+    @Column(name = "original_title")
     private String originalTitle;
     private String alt;
     private String image;
     private double rate;
-    private Year year;
+    private int year;
 
     public String getId() {
         return this.id;
@@ -59,11 +64,11 @@ public class Movie {
         this.rate = rate;
     }
 
-    public Year getYear() {
+    public int getYear() {
         return this.year;
     }
 
-    public void setYear(Year year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

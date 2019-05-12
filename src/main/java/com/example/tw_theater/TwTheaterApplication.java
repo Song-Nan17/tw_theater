@@ -9,5 +9,4 @@ public class TwTheaterApplication {
     public static void main(String[] args) {
         SpringApplication.run(TwTheaterApplication.class, args);
     }
-
 }
