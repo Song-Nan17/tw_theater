@@ -1,26 +1,12 @@
-package com.example.tw_theater.dao;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+package com.example.tw_theater.dao.initialization;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Storage {
-    public static void main(String[] args) {
-        String ticket_url = "http://api.douban.com/v2/movie/in_theaters";
-        String response = getData(ticket_url);
-        JSONObject root = JSONObject.parseObject(response, (Type) Object.class);
-        String count = root.getString("count");
-        System.out.println(count);
-        JSONArray movies = root.getJSONArray("subjects");
-        Object movie = movies.getObject(0, Object.class);
-        System.out.println(movie);
-    }
+public class Response {
 
     public static String getData(String url) {
         String response = null;
