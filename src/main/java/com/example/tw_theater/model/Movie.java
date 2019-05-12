@@ -2,6 +2,7 @@ package com.example.tw_theater.model;
 
 import javax.persistence.*;
 import java.time.Year;
+import java.util.List;
 
 @Entity
 @Table(name = "movie")
@@ -15,6 +16,18 @@ public class Movie {
     private String image;
     private double rate;
     private int year;
+    @ManyToMany
+    @JoinTable(name = "cast", joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_maker_id"))
+    private List<FilmMaker> casts;
+    @ManyToMany
+    @JoinTable(name = "director", joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_maker_id"))
+    private List<FilmMaker> directors;
+
+    @ManyToMany
+    @JoinTable(name = "director", joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_maker_id"))
 
     public String getId() {
         return this.id;
@@ -83,5 +96,21 @@ public class Movie {
                 ", rate=" + rate +
                 ", year=" + year +
                 '}';
+    }
+
+    public List<FilmMaker> getCasts() {
+        return this.casts;
+    }
+
+    public void setCasts(List<FilmMaker> casts) {
+        this.casts = casts;
+    }
+
+    public List<FilmMaker> getDirectors() {
+        return this.directors;
+    }
+
+    public void setDirectors(List<FilmMaker> directors) {
+        this.directors = directors;
     }
 }
