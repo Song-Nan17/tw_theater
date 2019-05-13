@@ -36,18 +36,29 @@ public class InitMovieController {
     }
 
     void saveMovie(Movie movie) {
-        List<Genre> genres = setGenreIdWhenInDB(movie.getGenres());
-        List<FilmMaker> casts = setFilmMakerIdWhenInDB(movie.getCasts());
-        List<FilmMaker> directors = setFilmMakerIdWhenInDB(movie.getCasts());
-        movie.setGenres(genres);
-        movie.setCasts(casts);
-        movie.setDirectors(directors);
-        filmMakerRepository.saveAll(movie.getCasts());
-        filmMakerRepository.saveAll(movie.getDirectors());
-        genreRepository.saveAll(movie.getGenres());
+        saveCasts(movie);
+        saveDirectors(movie);
+        saveGenres(movie);
         movieRepository.save(movie);
     }
 
+    void saveCasts(Movie movie) {
+        List<FilmMaker> casts = setFilmMakerIdWhenInDB(movie.getCasts());
+        movie.setCasts(casts);
+        filmMakerRepository.saveAll(movie.getCasts());
+    }
+
+    void saveDirectors(Movie movie) {
+        List<FilmMaker> directors = setFilmMakerIdWhenInDB(movie.getDirectors());
+        movie.setDirectors(directors);
+        filmMakerRepository.saveAll(movie.getDirectors());
+    }
+
+    void saveGenres(Movie movie) {
+        List<Genre> genres = setGenreIdWhenInDB(movie.getGenres());
+        movie.setGenres(genres);
+        genreRepository.saveAll(movie.getGenres());
+    }
 
     List<FilmMaker> setFilmMakerIdWhenInDB(List<FilmMaker> filmMakers) {
         List<FilmMaker> result = new ArrayList<>();

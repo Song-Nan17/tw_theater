@@ -17,7 +17,7 @@ public class MovieTools {
 
     public List<Movie> getMovies(int start, int count) {
         List<Movie> movies = new ArrayList<>();
-            String movie_url = "https://api.douban.com/v2/movie/top250?start=" + start + "&count=" + count;
+            String movie_url = "https://api.douban.com/v2/movie/top250?apikey=0df993c66c0c636e29ecbb5344252a4a&start=" + start + "&count=" + count;
             movies.addAll(generateMovies(movie_url));
         return movies;
     }
