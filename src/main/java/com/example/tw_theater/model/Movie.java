@@ -1,5 +1,7 @@
 package com.example.tw_theater.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class Movie {
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
+    @Column(name = "in_theater")
+//    @JsonIgnore
+    private boolean inTheater;
 
     public String getId() {
         return this.id;
@@ -119,5 +124,13 @@ public class Movie {
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
+    }
+
+    public boolean isInTheater() {
+        return this.inTheater;
+    }
+
+    public void setInTheater(boolean inTheater) {
+        this.inTheater = inTheater;
     }
 }
