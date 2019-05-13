@@ -2,7 +2,6 @@ package com.example.tw_theater.dao;
 
 import com.example.tw_theater.model.Genre;
 import com.example.tw_theater.model.Movie;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
@@ -14,4 +13,6 @@ public interface MovieRepository extends CrudRepository<Movie, String> {
     List<Movie> findByTitle(String title);
 
     List<Movie> findByTitleLike(String title, Pageable pageable);
+
+    List<Movie> findByTitleLikeAndGenresContains(String title, Genre genre, Pageable pageable);
 }

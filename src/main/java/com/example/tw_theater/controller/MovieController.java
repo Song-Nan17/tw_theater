@@ -25,10 +25,13 @@ public class MovieController {
         size = size == null ? 10 : size;
 
         List<Movie> movies = new ArrayList<>();
-        if (title != null) {
-            movies = findByTitleLike(title, page, size);
+        if (title != null && genre != null) {
+            movies = findByTitleLikeAndGenresContain(title, genre, page, size);
         } else if (genre != null) {
             movies = findByGenresContain(genre, page, size);
+        } else if (title != null) {
+            movies = findByTitleLike(title, page, size);
+
         }
         return movies;
     }
@@ -41,6 +44,15 @@ public class MovieController {
     List<Movie> findByGenresContain(String genreName, Integer page, Integer size) {
         Genre genre = genreRepository.findByName(genreName).get();
         return movieRepository.findByGenresContains(genre, PageRequest.of(page, size));
+    }
+
+    List<Movie> findByTitleLikeAndGenresContain(
+            String title, String genreName,
+            Integer page, Integer size) {
+        String titleLike = "%" + title + "%";
+        Genre genre = genreRepository.findByName(genreName).get();
+        return movieRepository
+                .findByTitleLikeAndGenresContains(titleLike, genre, PageRequest.of(page, size));
     }
 
 }
