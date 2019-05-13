@@ -30,9 +30,21 @@ public class InitMovieController {
         int start = 0;
         int count = 50;
         for (int i = 0; i < 5; i++, start += count) {
-            List<Movie> movies = movieTools.getMovies(start, count);
+            String url = "https://api.douban.com/v2/movie/top250?apikey=0df993c66c0c636e29ecbb5344252a4a&start=" + start + "&count=" + count;
+            List<Movie> movies = movieTools.getMovies(url);
             movies.forEach(movie -> saveMovie(movie));
         }
+    }
+
+    @PostMapping("/movies/in_theater")
+    List<Movie> getMoviesIsInTheater() {
+        String url = "https://api.douban.com/v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a";
+        List<Movie> movies = movieTools.getMovies(url);
+        movies.forEach(movie -> {
+            movie.setInTheater(true);
+            saveMovie(movie);
+        });
+        return movies;
     }
 
     void saveMovie(Movie movie) {

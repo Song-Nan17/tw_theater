@@ -27,6 +27,8 @@ public class Movie {
     @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
+    @Column(name = "in_theater")
+    private boolean inTheater;
 
     public String getId() {
         return this.id;
@@ -84,19 +86,6 @@ public class Movie {
         this.year = year;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", alt='" + alt + '\'' +
-                ", image='" + image + '\'' +
-                ", rate=" + rate +
-                ", year=" + year +
-                '}';
-    }
-
     public List<FilmMaker> getCasts() {
         return this.casts;
     }
@@ -119,5 +108,13 @@ public class Movie {
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
+    }
+
+    public boolean isInTheater() {
+        return this.inTheater;
+    }
+
+    public void setInTheater(boolean inTheater) {
+        this.inTheater = inTheater;
     }
 }
