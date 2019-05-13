@@ -7,8 +7,6 @@ import com.example.tw_theater.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -22,13 +20,25 @@ public class MovieController {
     private GenreRepository genreRepository;
 
     @GetMapping("/movies")
-    List<Movie> findByGenresContain(String title, String genreName, Integer page, Integer size) {
+    List<Movie> findMovies(String title, String genre, Integer page, Integer size) {
         List<Movie> movies = new ArrayList<>();
         if (title != null) {
-            movies = movieRepository.findByTitle(title);
+            movies = findByTitle(title);
+        } else if (genre != null) {
+            movies = findByGenresContain(genre, page, size);
         }
-//        Genre genre = genreRepository.findByName(genreName).get();
         return movies;
+    }
+
+    List<Movie> findByTitle(String title) {
+        return movieRepository.findByTitle(title);
+    }
+
+    List<Movie> findByGenresContain(String genreName, Integer page, Integer size) {
+        Genre genre = genreRepository.findByName(genreName).get();
+        page = page == null ? 0 : page;
+        size = size == null ? 10 : size;
+        return movieRepository.findByGenresContains(genre, PageRequest.of(page, size));
     }
 
 }
