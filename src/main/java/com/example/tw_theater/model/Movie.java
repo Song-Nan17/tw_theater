@@ -30,7 +30,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
     @Column(name = "in_theater")
-//    @JsonIgnore
     private boolean inTheater;
 
     public String getId() {
@@ -87,19 +86,6 @@ public class Movie {
 
     public void setYear(int year) {
         this.year = year;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", alt='" + alt + '\'' +
-                ", image='" + image + '\'' +
-                ", rate=" + rate +
-                ", year=" + year +
-                '}';
     }
 
     public List<FilmMaker> getCasts() {
