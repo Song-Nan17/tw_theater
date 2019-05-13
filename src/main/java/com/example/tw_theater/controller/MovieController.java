@@ -45,7 +45,8 @@ public class MovieController {
 
     Page<Movie> findByTitleLike(String title) {
         String titleLike = "%" + title + "%";
-        return movieRepository.findByTitleLike(titleLike, this.pageRequest);
+        return movieRepository
+                .findByOriginalTitleLikeOrTitleLike(titleLike, titleLike, this.pageRequest);
     }
 
     Page<Movie> findByGenresContain(String genreName) {
@@ -57,7 +58,8 @@ public class MovieController {
         String titleLike = "%" + title + "%";
         Genre genre = genreRepository.findByName(genreName).get();
         return movieRepository
-                .findByTitleLikeAndGenresContains(titleLike, genre, this.pageRequest);
+                .findByOriginalTitleLikeOrTitleLikeAndGenresContains(
+                        titleLike, titleLike, genre, this.pageRequest);
     }
 
     @GetMapping("/movies/in_theater")
