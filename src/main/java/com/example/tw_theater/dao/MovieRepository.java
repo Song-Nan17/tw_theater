@@ -14,4 +14,6 @@ public interface MovieRepository extends CrudRepository<Movie, String> {
     Page<Movie> findByTitleLikeAndGenresContains(String title, Genre genre, Pageable pageable);
 
     Page<Movie> findAll(Pageable pageable);
+
+    Page<Movie> findByInTheaterIsTrue(Pageable pageable);
 }

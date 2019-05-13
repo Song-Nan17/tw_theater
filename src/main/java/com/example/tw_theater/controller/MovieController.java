@@ -21,12 +21,15 @@ public class MovieController {
     private Integer size = 10;
     private PageRequest pageRequest = null;
 
-    @GetMapping("/movies")
-    Page<Movie> findMovies(String title, String genre, Integer page, Integer size) {
+    void setPageRequest(Integer page, Integer size) {
         this.page = page == null ? 0 : page;
         this.size = size == null ? 10 : size;
         this.pageRequest = PageRequest.of(this.page, this.size);
+    }
 
+    @GetMapping("/movies")
+    Page<Movie> findMovies(String title, String genre, Integer page, Integer size) {
+        setPageRequest(page, size);
         Page<Movie> movies = null;
         if (title != null && genre != null) {
             movies = findByTitleLikeAndGenresContain(title, genre);
@@ -55,6 +58,12 @@ public class MovieController {
         Genre genre = genreRepository.findByName(genreName).get();
         return movieRepository
                 .findByTitleLikeAndGenresContains(titleLike, genre, this.pageRequest);
+    }
+
+    @GetMapping("/movies/in_theater")
+    Page<Movie> findMoviesIsInTheater(Integer page, Integer size) {
+        setPageRequest(page, size);
+        return movieRepository.findByInTheaterIsTrue(this.pageRequest);
     }
 
 }
