@@ -5,12 +5,10 @@ import com.example.tw_theater.dao.MovieRepository;
 import com.example.tw_theater.model.Genre;
 import com.example.tw_theater.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class MovieController {
@@ -19,40 +17,44 @@ public class MovieController {
     @Autowired
     private GenreRepository genreRepository;
 
+    private Integer page = 0;
+    private Integer size = 10;
+    private PageRequest pageRequest = null;
+
     @GetMapping("/movies")
-    List<Movie> findMovies(String title, String genre, Integer page, Integer size) {
-        page = page == null ? 0 : page;
-        size = size == null ? 10 : size;
+    Page<Movie> findMovies(String title, String genre, Integer page, Integer size) {
+        this.page = page == null ? 0 : page;
+        this.size = size == null ? 10 : size;
+        this.pageRequest = PageRequest.of(this.page, this.size);
 
-        List<Movie> movies = new ArrayList<>();
+        Page<Movie> movies = null;
         if (title != null && genre != null) {
-            movies = findByTitleLikeAndGenresContain(title, genre, page, size);
+            movies = findByTitleLikeAndGenresContain(title, genre);
         } else if (genre != null) {
-            movies = findByGenresContain(genre, page, size);
+            movies = findByGenresContain(genre);
         } else if (title != null) {
-            movies = findByTitleLike(title, page, size);
-
+            movies = findByTitleLike(title);
+        } else {
+            movies = movieRepository.findAll(this.pageRequest);
         }
         return movies;
     }
 
-    List<Movie> findByTitleLike(String title, Integer page, Integer size) {
+    Page<Movie> findByTitleLike(String title) {
         String titleLike = "%" + title + "%";
-        return movieRepository.findByTitleLike(titleLike, PageRequest.of(page, size));
+        return movieRepository.findByTitleLike(titleLike, this.pageRequest);
     }
 
-    List<Movie> findByGenresContain(String genreName, Integer page, Integer size) {
+    Page<Movie> findByGenresContain(String genreName) {
         Genre genre = genreRepository.findByName(genreName).get();
-        return movieRepository.findByGenresContains(genre, PageRequest.of(page, size));
+        return movieRepository.findByGenresContains(genre, this.pageRequest);
     }
 
-    List<Movie> findByTitleLikeAndGenresContain(
-            String title, String genreName,
-            Integer page, Integer size) {
+    Page<Movie> findByTitleLikeAndGenresContain(String title, String genreName) {
         String titleLike = "%" + title + "%";
         Genre genre = genreRepository.findByName(genreName).get();
         return movieRepository
-                .findByTitleLikeAndGenresContains(titleLike, genre, PageRequest.of(page, size));
+                .findByTitleLikeAndGenresContains(titleLike, genre, this.pageRequest);
     }
 
 }
