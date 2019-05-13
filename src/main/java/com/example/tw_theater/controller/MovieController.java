@@ -21,23 +21,25 @@ public class MovieController {
 
     @GetMapping("/movies")
     List<Movie> findMovies(String title, String genre, Integer page, Integer size) {
+        page = page == null ? 0 : page;
+        size = size == null ? 10 : size;
+
         List<Movie> movies = new ArrayList<>();
         if (title != null) {
-            movies = findByTitle(title);
+            movies = findByTitleLike(title, page, size);
         } else if (genre != null) {
             movies = findByGenresContain(genre, page, size);
         }
         return movies;
     }
 
-    List<Movie> findByTitle(String title) {
-        return movieRepository.findByTitle(title);
+    List<Movie> findByTitleLike(String title, Integer page, Integer size) {
+        String titleLike = "%" + title + "%";
+        return movieRepository.findByTitleLike(titleLike, PageRequest.of(page, size));
     }
 
     List<Movie> findByGenresContain(String genreName, Integer page, Integer size) {
         Genre genre = genreRepository.findByName(genreName).get();
-        page = page == null ? 0 : page;
-        size = size == null ? 10 : size;
         return movieRepository.findByGenresContains(genre, PageRequest.of(page, size));
     }
 
