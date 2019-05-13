@@ -7,10 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MovieRepository extends CrudRepository<Movie, String> {
-    Page<Movie> findByGenresContains(Genre genre, Pageable pageable);
-
-    Page<Movie> findByOriginalTitleLikeOrTitleLike(
-            String title, String originalTitle, Pageable pageable);
 
     Page<Movie> findByOriginalTitleLikeOrTitleLikeAndGenresContains(
             String title, String originalTitle, Genre genre, Pageable pageable);

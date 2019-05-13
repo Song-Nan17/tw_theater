@@ -30,32 +30,18 @@ public class MovieController {
     @GetMapping("/movies")
     Page<Movie> findMovies(String title, String genre, Integer page, Integer size) {
         setPageRequest(page, size);
+        title = title == null ? "" : title;
+        String titleLike = "%" + title + "%";
         Page<Movie> movies = null;
-        if (title != null && genre != null) {
-            movies = findByTitleLikeAndGenresContain(title, genre);
-        } else if (genre != null) {
-            movies = findByGenresContain(genre);
-        } else if (title != null) {
-            movies = findByTitleLike(title);
-        } else {
+        if(genre==null) {
             movies = movieRepository.findAll(this.pageRequest);
+        }else {
+            movies = findByTitleLikeAndGenresContain(titleLike, genre);
         }
         return movies;
     }
 
-    Page<Movie> findByTitleLike(String title) {
-        String titleLike = "%" + title + "%";
-        return movieRepository
-                .findByOriginalTitleLikeOrTitleLike(titleLike, titleLike, this.pageRequest);
-    }
-
-    Page<Movie> findByGenresContain(String genreName) {
-        Genre genre = genreRepository.findByName(genreName).get();
-        return movieRepository.findByGenresContains(genre, this.pageRequest);
-    }
-
-    Page<Movie> findByTitleLikeAndGenresContain(String title, String genreName) {
-        String titleLike = "%" + title + "%";
+    Page<Movie> findByTitleLikeAndGenresContain(String titleLike, String genreName) {
         Genre genre = genreRepository.findByName(genreName).get();
         return movieRepository
                 .findByOriginalTitleLikeOrTitleLikeAndGenresContains(
