@@ -1,24 +1,36 @@
 package com.example.tw_theater.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "film_maker")
 public class FilmMaker {
     @Id
-    private String id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @JsonIgnore
+    private Integer id;
+    @Column(name = "user_id")
+    private String userId;
     private String name;
     private String image;
     private String alt;
 
-    public String getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {

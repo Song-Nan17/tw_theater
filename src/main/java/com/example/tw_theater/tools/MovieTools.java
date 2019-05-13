@@ -15,14 +15,10 @@ public class MovieTools {
     private FilmMakerTools filmMakerTools = new FilmMakerTools();
     private GenreTools genreTools = new GenreTools();
 
-    public List<Movie> getMovies() {
+    public List<Movie> getMovies(int start, int count) {
         List<Movie> movies = new ArrayList<>();
-        int start = 0;
-        int count = 20;
-//        for (int i = 0; i < 5; i++, start += count) {
-        String movie_url = "https://api.douban.com/v2/movie/top250?start=" + start + "&count=" + count;
-        movies.addAll(generateMovies(movie_url));
-//        }
+            String movie_url = "https://api.douban.com/v2/movie/top250?start=" + start + "&count=" + count;
+            movies.addAll(generateMovies(movie_url));
         return movies;
     }
 
@@ -52,7 +48,7 @@ public class MovieTools {
         JSONArray castsStr = subject.getJSONArray("casts");
         JSONArray genresStr = subject.getJSONArray("genres");
 
-        List<FilmMaker> directors =  filmMakerTools.generateFilmMakers(directorsStr);
+        List<FilmMaker> directors = filmMakerTools.generateFilmMakers(directorsStr);
         List<FilmMaker> casts = filmMakerTools.generateFilmMakers(castsStr);
         List<Genre> genres = genreTools.getGenres(genresStr);
 

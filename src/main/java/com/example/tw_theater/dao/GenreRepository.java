@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface GenreRepository extends CrudRepository<Genre,Iterable> {
-    Optional<Genre> findByNameEquals(String name);
+    Optional<Genre> findByName(String name);
 }
