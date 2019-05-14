@@ -37,7 +37,7 @@ public class InitMovieController {
     }
 
     @PostMapping("/movies/in_theater")
-    List<Movie> getMoviesIsInTheater() {
+    List<Movie> storageMoviesIsInTheater() {
         String url = "https://api.douban.com/v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a";
         List<Movie> movies = movieTools.getMovies(url);
         movies.forEach(movie -> {
@@ -48,34 +48,9 @@ public class InitMovieController {
     }
 
     void saveMovie(Movie movie) {
-        saveCasts(movie);
-        saveDirectors(movie);
+        InitFilmMakerController.saveCasts(movie);
+        InitFilmMakerController.saveDirectors(movie);
         InitGenreController.saveGenres(movie);
         movieRepository.save(movie);
-    }
-
-    void saveCasts(Movie movie) {
-        List<FilmMaker> casts = setFilmMakerIdWhenInDB(movie.getCasts());
-        movie.setCasts(casts);
-        filmMakerRepository.saveAll(movie.getCasts());
-    }
-
-    void saveDirectors(Movie movie) {
-        List<FilmMaker> directors = setFilmMakerIdWhenInDB(movie.getDirectors());
-        movie.setDirectors(directors);
-        filmMakerRepository.saveAll(movie.getDirectors());
-    }
-
-    List<FilmMaker> setFilmMakerIdWhenInDB(List<FilmMaker> filmMakers) {
-        List<FilmMaker> result = new ArrayList<>();
-        for (int i = 0; i < filmMakers.size(); i++) {
-            String name = filmMakers.get(i).getName();
-            String userId = filmMakers.get(i).getUserId();
-            FilmMaker filmMaker = filmMakerRepository
-                    .findByNameAndUserId(name, userId)
-                    .orElse(filmMakers.get(i));
-            result.add(filmMaker);
-        }
-        return result;
     }
 }
