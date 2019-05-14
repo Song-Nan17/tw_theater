@@ -56,13 +56,6 @@ public class MovieController {
                         titleLike, titleLike, genre, this.pageRequest);
     }
 
-    @GetMapping("/movies/all")
-    String getAll(HttpServletRequest request) {
-        Iterable<Movie> movies = movieRepository.findAll();
-        String callback = request.getParameter("callback");
-        return callback + "(" + JSON.toJSONString(movies) + ")";
-    }
-
     @GetMapping("/movies/{id}")
     String getById(@PathVariable("id") String id, HttpServletRequest request) {
         Optional<Movie> movie = movieRepository.findById(id);
