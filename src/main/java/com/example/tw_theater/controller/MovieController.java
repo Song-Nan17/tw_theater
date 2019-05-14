@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +54,13 @@ public class MovieController {
         return movieRepository
                 .findByOriginalTitleLikeOrTitleLikeAndGenresContains(
                         titleLike, titleLike, genre, this.pageRequest);
+    }
+
+    @GetMapping("/movies/all")
+    String getAll(HttpServletRequest request) {
+        Iterable<Movie> movies = movieRepository.findAll();
+        String callback = request.getParameter("callback");
+        return callback + "(" + JSON.toJSONString(movies) + ")";
     }
 
     @GetMapping("/movies/{id}")
