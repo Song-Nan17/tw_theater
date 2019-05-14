@@ -5,7 +5,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comment")
@@ -18,13 +17,13 @@ public class Comment {
     private Integer rate;
     private String content;
     @Column(name = "create_at")
-    private Timestamp time;
+    private String time;
 
     public Comment(){
 
     }
 
-    public Comment(String id, String movieId, String author, Integer rate, String content, Timestamp time) {
+    public Comment(String id, String movieId, String author, Integer rate, String content, String time) {
         this.id = id;
         this.movieId = movieId;
         this.author = author;
@@ -73,11 +72,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return this.time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 }
