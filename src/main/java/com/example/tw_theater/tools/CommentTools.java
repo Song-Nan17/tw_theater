@@ -6,6 +6,7 @@ import com.example.tw_theater.dao.Response;
 import com.example.tw_theater.model.Comment;
 
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class CommentTools {
         String author = commentObject.getJSONObject("author").getString("name");
         Integer rate = commentObject.getJSONObject("rating").getInteger("value");
         String content = commentObject.getString("content");
-        String time = commentObject.getString("created_at");
+        Timestamp time = commentObject.getTimestamp("created_at");
 
         Comment comment = new Comment(id,movieId,author,rate,content,time);
         return comment;
