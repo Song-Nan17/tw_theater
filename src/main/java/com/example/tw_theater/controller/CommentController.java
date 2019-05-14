@@ -4,12 +4,11 @@ package com.example.tw_theater.controller;
 import com.alibaba.fastjson.JSON;
 import com.example.tw_theater.dao.CommentRepository;
 import com.example.tw_theater.model.Comment;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
