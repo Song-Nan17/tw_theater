@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
 import java.util.Optional;
 
 @RestController
@@ -40,19 +41,26 @@ public class MovieController {
 
         Page<Movie> movies = null;
         if (genre == null) {
-            movies = movieRepository.findAll(this.pageRequest);
+            movies = movieRepository
+                    .findByTitleLikeOrOriginalTitleLike(titleLike, titleLike, this.pageRequest);
         } else {
-            movies = findByTitleLikeAndGenresContain(titleLike, genre);
+            movies = findByTitleLikeAndGenresContain(title, genre);
         }
         String callback = request.getParameter("callback");
         return callback + "(" + JSON.toJSONString(movies) + ")";
     }
 
-    Page<Movie> findByTitleLikeAndGenresContain(String titleLike, String genreName) {
+    Page<Movie> findByTitleLikeAndGenresContain(String title, String genreName) {
         Genre genre = genreRepository.findByName(genreName).get();
-        return movieRepository
-                .findByOriginalTitleLikeOrTitleLikeAndGenresContains(
-                        titleLike, titleLike, genre, this.pageRequest);
+        Page<Movie> moviePage = movieRepository.findByGenresContains(genre, this.pageRequest);
+        Iterator<Movie> movieIterator = moviePage.iterator();
+        while (movieIterator.hasNext()) {
+            Movie movie = movieIterator.next();
+            if (movie.getTitle().contains(title)) {
+                movieIterator.remove();
+            }
+        }
+        return moviePage;
     }
 
     @GetMapping("/movies/{id}")

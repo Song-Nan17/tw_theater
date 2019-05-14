@@ -10,12 +10,13 @@ import java.util.List;
 
 public interface MovieRepository extends CrudRepository<Movie, String> {
 
-    Page<Movie> findByOriginalTitleLikeOrTitleLikeAndGenresContains(
-            String title, String originalTitle, Genre genre, Pageable pageable);
+    Page<Movie> findByGenresContains(Genre genre, Pageable pageable);
 
     Page<Movie> findAll(Pageable pageable);
 
     Page<Movie> findByInTheaterIsTrue(Pageable pageable);
 
     List<Movie> findByTitleLikeOrOriginalTitleLike(String title, String originalTitle);
+
+    Page<Movie> findByTitleLikeOrOriginalTitleLike(String title, String originalTitle, Pageable pageable);
 }
