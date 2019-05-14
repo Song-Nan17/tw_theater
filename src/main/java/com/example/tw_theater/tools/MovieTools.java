@@ -21,10 +21,10 @@ public class MovieTools {
         return movies;
     }
 
-    List<Movie> generateMovies(String movie_url) {
-        String response = Response.getData(movie_url);
-        JSONObject date = JSONObject.parseObject(response, (Type) Object.class);
-        JSONArray subjects = date.getJSONArray("subjects");
+    List<Movie> generateMovies(String url) {
+        String response = Response.getData(url);
+        JSONObject data = JSONObject.parseObject(response, (Type) Object.class);
+        JSONArray subjects = data.getJSONArray("subjects");
 
         List<Movie> movies = new ArrayList<>();
         for (int i = 0; i < subjects.size(); i++) {
@@ -63,5 +63,13 @@ public class MovieTools {
         movie.setCasts(casts);
         movie.setGenres(genres);
         return movie;
+    }
+
+    public String getMovieIntroduction(String id) {
+        String url = "https://api.douban.com/v2/movie/subject/"
+                + id + "?apikey=0df993c66c0c636e29ecbb5344252a4a";
+        String response = Response.getData(url);
+        JSONObject data = JSONObject.parseObject(response, (Type) Object.class);
+        return data.getString("summary");
     }
 }
