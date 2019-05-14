@@ -1,7 +1,5 @@
 package com.example.tw_theater.controller.innitialization;
 
-import com.example.tw_theater.dao.FilmMakerRepository;
-import com.example.tw_theater.dao.GenreRepository;
 import com.example.tw_theater.dao.MovieRepository;
 import com.example.tw_theater.model.Movie;
 import com.example.tw_theater.tools.MovieTools;
@@ -9,18 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class InitMovieController {
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private FilmMakerRepository filmMakerRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-
     private MovieTools movieTools = new MovieTools();
 
     @PostMapping("/movies")

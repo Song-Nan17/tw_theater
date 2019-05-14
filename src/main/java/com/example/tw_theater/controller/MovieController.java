@@ -1,5 +1,6 @@
 package com.example.tw_theater.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.example.tw_theater.dao.GenreRepository;
 import com.example.tw_theater.dao.MovieRepository;
 import com.example.tw_theater.model.Genre;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
@@ -32,17 +33,19 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    Page<Movie> findMovies(String title, String genre, Integer page, Integer size) {
+    String findMovies(String title, String genre, Integer page, Integer size, HttpServletRequest request) {
         setPageRequest(page, size);
         title = title == null ? "" : title;
         String titleLike = "%" + title + "%";
+
         Page<Movie> movies = null;
-        if(genre==null) {
+        if (genre == null) {
             movies = movieRepository.findAll(this.pageRequest);
-        }else {
+        } else {
             movies = findByTitleLikeAndGenresContain(titleLike, genre);
         }
-        return movies;
+        String callback = request.getParameter("callback");
+        return callback + "(" + JSON.toJSONString(movies) + ")";
     }
 
     Page<Movie> findByTitleLikeAndGenresContain(String titleLike, String genreName) {
@@ -53,13 +56,17 @@ public class MovieController {
     }
 
     @GetMapping("/movies/{id}")
-    Optional<Movie> getById(@PathVariable("id") String id) {
-        return movieRepository.findById(id);
+    String getById(@PathVariable("id") String id, HttpServletRequest request) {
+        Optional<Movie> movie = movieRepository.findById(id);
+        String callback = request.getParameter("callback");
+        return callback + "(" + JSON.toJSONString(movie) + ")";
     }
 
     @GetMapping("/movies/in_theater")
-    Page<Movie> findMoviesIsInTheater(Integer page, Integer size) {
+    String findMoviesIsInTheater(Integer page, Integer size, HttpServletRequest request) {
         setPageRequest(page, size);
-        return movieRepository.findByInTheaterIsTrue(this.pageRequest);
+        Page<Movie> movies = movieRepository.findByInTheaterIsTrue(this.pageRequest);
+        String callback = request.getParameter("callback");
+        return callback + "(" + JSON.toJSONString(movies) + ")";
     }
 }
