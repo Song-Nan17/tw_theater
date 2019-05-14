@@ -4,7 +4,6 @@ import com.example.tw_theater.dao.FilmMakerRepository;
 import com.example.tw_theater.dao.GenreRepository;
 import com.example.tw_theater.dao.MovieRepository;
 import com.example.tw_theater.model.FilmMaker;
-import com.example.tw_theater.model.Genre;
 import com.example.tw_theater.model.Movie;
 import com.example.tw_theater.tools.MovieTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,8 @@ public class InitMovieController {
         int start = 0;
         int count = 50;
         for (int i = 0; i < 5; i++, start += count) {
-            String url = "https://api.douban.com/v2/movie/top250?apikey=0df993c66c0c636e29ecbb5344252a4a&start=" + start + "&count=" + count;
+            String url = "https://api.douban.com/v2/movie/top250?apikey=0df993c66c0c636e29ecbb5344252a4a&start="
+                    + start + "&count=" + count;
             List<Movie> movies = movieTools.getMovies(url);
             movies.forEach(movie -> saveMovie(movie));
         }
@@ -50,7 +50,7 @@ public class InitMovieController {
     void saveMovie(Movie movie) {
         saveCasts(movie);
         saveDirectors(movie);
-        saveGenres(movie);
+        InitGenreController.saveGenres(movie);
         movieRepository.save(movie);
     }
 
@@ -66,12 +66,6 @@ public class InitMovieController {
         filmMakerRepository.saveAll(movie.getDirectors());
     }
 
-    void saveGenres(Movie movie) {
-        List<Genre> genres = setGenreIdWhenInDB(movie.getGenres());
-        movie.setGenres(genres);
-        genreRepository.saveAll(movie.getGenres());
-    }
-
     List<FilmMaker> setFilmMakerIdWhenInDB(List<FilmMaker> filmMakers) {
         List<FilmMaker> result = new ArrayList<>();
         for (int i = 0; i < filmMakers.size(); i++) {
@@ -81,16 +75,6 @@ public class InitMovieController {
                     .findByNameAndUserId(name, userId)
                     .orElse(filmMakers.get(i));
             result.add(filmMaker);
-        }
-        return result;
-    }
-
-    List<Genre> setGenreIdWhenInDB(List<Genre> genres) {
-        List<Genre> result = new ArrayList<>();
-        for (int i = 0; i < genres.size(); i++) {
-            String name = genres.get(i).getName();
-            Genre genre = genreRepository.findByName(name).orElse(genres.get(i));
-            result.add(genre);
         }
         return result;
     }
