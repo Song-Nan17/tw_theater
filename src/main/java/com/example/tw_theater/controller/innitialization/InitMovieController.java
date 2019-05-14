@@ -3,7 +3,6 @@ package com.example.tw_theater.controller.innitialization;
 import com.example.tw_theater.dao.FilmMakerRepository;
 import com.example.tw_theater.dao.GenreRepository;
 import com.example.tw_theater.dao.MovieRepository;
-import com.example.tw_theater.model.FilmMaker;
 import com.example.tw_theater.model.Movie;
 import com.example.tw_theater.tools.MovieTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +51,15 @@ public class InitMovieController {
         InitFilmMakerController.saveDirectors(movie);
         InitGenreController.saveGenres(movie);
         movieRepository.save(movie);
+    }
+
+    @PostMapping("/movies/introduction")
+    void storageSumaryOfMovies() {
+        Iterable<Movie> movies = movieRepository.findAll();
+        movies.forEach(movie -> {
+            String introduction = movieTools.getMovieIntroduction(movie.getId());
+            movie.setIntroduction(introduction);
+            movieRepository.save(movie);
+        });
     }
 }

@@ -29,6 +29,7 @@ public class Movie {
     private List<Genre> genres;
     @Column(name = "in_theater")
     private boolean inTheater;
+    private String introduction;
 
     public String getId() {
         return this.id;
@@ -116,5 +117,13 @@ public class Movie {
 
     public void setInTheater(boolean inTheater) {
         this.inTheater = inTheater;
+    }
+
+    public String getIntroduction() {
+        return this.introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }
